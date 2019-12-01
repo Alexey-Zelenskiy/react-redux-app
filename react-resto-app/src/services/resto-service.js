@@ -1,9 +1,6 @@
 export default class RestoService {
-
-  _apiBase = 'http://localhost:5000';
-
   async getResource(url) {
-    const res = await fetch(`${this._apiBase}${url}`);
+    const res = await fetch(url);
 
     if (!res.ok) {
       throw new Error(`Could not fetch ${url}` +

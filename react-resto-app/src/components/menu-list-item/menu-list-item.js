@@ -2,7 +2,7 @@ import React from 'react';
 import './menu-list-item.scss';
 import icons from './icons'
 
-const MenuListItem = ({menuItem}) => {
+const MenuListItem = ({menuItem, onAddToCart}) => {
 
   const {title, price, url, category} = menuItem;
 
@@ -19,9 +19,12 @@ const MenuListItem = ({menuItem}) => {
            alt={title}/>
       <div className="menu__category">Category: <span>{category}</span></div>
       <div className="menu__price">Price: <span>{price}$</span></div>
-      <button className="menu__btn">Add to cart</button>
+      <button onClick={() =>
+        onAddToCart()
+      } className="menu__btn">Add to cart
+      </button>
     </li>
   )
-}
+};
 
 export default MenuListItem;
