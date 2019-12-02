@@ -11,11 +11,13 @@ import Error from "../error";
 class MenuList extends Component {
 
   componentDidMount() {
-    const {RestoService, menuLoaded, menuRequested, menuError} = this.props;
-    menuRequested();
-    RestoService.getMenuItems()
-      .then(res => menuLoaded(res))
-      .catch(menuError)
+    const {RestoService, menuLoaded, menuRequested, menuError, menuItems} = this.props;
+    if (!menuItems.length) {
+      menuRequested();
+      RestoService.getMenuItems()
+        .then(res => menuLoaded(res))
+        .catch(menuError)
+    }
   }
 
   render() {
@@ -45,10 +47,11 @@ class MenuList extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({menu, loading, error}) => {
   return {
-    menuItems: state.menu,
-    loading: state.loading
+    menuItems: menu,
+    loading: loading,
+    error: error
   }
 };
 

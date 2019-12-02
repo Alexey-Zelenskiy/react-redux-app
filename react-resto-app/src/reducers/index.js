@@ -1,21 +1,22 @@
 const initialState = {
   menu: [],
   loading: true,
-  error: false,
-  items: [],
-  total: 0
+  error: false
 };
 const uniqueId = () => {
   return `f${(~~(Math.random() * 1e8)).toString(16)}`
 };
 
 const reducer = (state = initialState, action) => {
-  console.log(state)
-  switch (action.type) {
+
+  const {type, payload} = action;
+
+  console.log(state);
+  switch (type) {
     case 'MENU_LOADED':
       return {
         ...state,
-        menu: action.payload.map(item => {
+        menu: payload.map(item => {
           return {
             ...item,
             count: 0,
@@ -27,43 +28,52 @@ const reducer = (state = initialState, action) => {
     case 'MENU_REQUESTED':
       return {
         ...state,
-        menu: state.menu,
-        loading: true,
-        error: false,
+        loading: true
       };
     case 'MENU_ERROR':
       return {
         ...state,
-        menu: state.menu,
         loading: true,
         error: true
       };
     case 'ITEM_ADD_TO_CART':
-      const id = action.payload;
-      const item = state.menu.find(item => item.id === id);
-      const newItem = {
-        title: item.title,
-        price: item.price,
-        url: item.url,
-        id: item.id + uniqueId(),
-        count:item.count+=1
-      };
       return {
         ...state,
-        items: [
-          ...state.items,
-          newItem
-        ]
+        menu: state.menu.map(item => {
+          if (item.id === payload) {
+            return {
+              ...item,
+              count: item.count + 1
+            }
+          }
+          return item
+        })
+        // items: state.items.map(item => {
+        //   if (id === action.payload.id) {
+        //     return {
+        //       ...state,
+        //       item
+        //     }
+        //   }
+        //   return {
+        //     ...state,
+        //     newItem
+        //   }
+        // })
       };
     case 'ITEM_REMOVE_FROM_CART':
       const idx = action.payload;
       const itemIndex = state.items.findIndex(item => item.id === idx);
       return {
         ...state,
-        items: [
-          ...state.items.slice(0, itemIndex),
-          ...state.items.slice(itemIndex + 1)
-        ],
+        menu: state.menu.map(item => {
+          if (item.id === payload) {
+            return {
+              ...item, count: item.count -= 1
+            }
+          }
+          return item
+        })
       };
     default:
       return state;
