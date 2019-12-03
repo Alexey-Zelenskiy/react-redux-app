@@ -62,8 +62,6 @@ const reducer = (state = initialState, action) => {
         // })
       };
     case 'ITEM_REMOVE_FROM_CART':
-      const idx = action.payload;
-      const itemIndex = state.items.findIndex(item => item.id === idx);
       return {
         ...state,
         menu: state.menu.map(item => {
